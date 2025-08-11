@@ -11,6 +11,10 @@
   </head>
 
   <body>
+    <%# ↓ この2行を追加して、通知メッセージを表示させる %>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
     <%= yield %>
   </body>
 </html>
