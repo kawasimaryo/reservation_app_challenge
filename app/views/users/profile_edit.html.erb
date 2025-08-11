@@ -1,0 +1,26 @@
+<h1>プロフィール編集</h1>
+
+<%= form_with(model: @user, url: profile_update_user_path(@user), method: :patch, local: true) do |f| %>
+  
+  <div class="field">
+    <%= f.label :name, "名前" %><br />
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :image, "アイコン画像" %><br />
+    <%# ここは後で画像アップロード機能（Active Storage）を実装する時に修正する %>
+    <%= f.text_field :image %>
+  </div>
+
+  <div class="field">
+    <%= f.label :introduction, "自己紹介" %><br />
+    <%= f.text_area :introduction, rows: 5 %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<%= link_to '戻る', :back %>

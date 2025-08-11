@@ -1,11 +1,15 @@
 Rails.application.routes.draw do
   devise_for :users
-  # この行を追加してトップページを設定
   root to: 'reservations#index'
 
-  # deviseのルーティング（後でdeviseコマンドが自動で追加してくれる）
-
-  resources :users
+  # ↓↓↓ この部分を書き換える ↓↓↓
+  resources :users do
+    member do
+      get 'profile_edit'
+      patch 'profile_update'
+    end
+  end
+  
   resources :rooms
   resources :reservations
 end
