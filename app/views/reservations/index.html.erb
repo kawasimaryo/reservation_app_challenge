@@ -23,15 +23,14 @@
           <td><%= reservation.room&.name %></td>
           <td><%= reservation.start_date&.strftime('%Y/%m/%d') %></td>
           <td><%= reservation.end_date&.strftime('%Y/%m/%d') %></td>
-          <td><%= link_to '編集', edit_reservation_path(reservation) %></td>
           <td>
-            <%= link_to '削除',
-                        reservation_path(reservation),
-                        method: :delete,
-                        data: { confirm: '本当に削除しますか？' } %>
-            <!-- Turbo使用時は下記に置換：
-            data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' }
-            -->
+            <%= link_to '編集', edit_reservation_path(reservation) %>
+          </td>
+          <td>
+            <%= button_to '削除',
+                          reservation_path(reservation),
+                          method: :delete,
+                          data: { confirm: '本当に削除しますか？' } %>
           </td>
         </tr>
       <% end %>

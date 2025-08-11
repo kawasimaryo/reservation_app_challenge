@@ -1,4 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# --- Ruby 3.3 + Rails 6.1 Logger NameError 対策 ---
+require 'logger'
+module ActiveSupport
+  module LoggerThreadSafeLevel
+    Logger = ::Logger unless const_defined?(:Logger)
+  end
+end
+# ---------------------------------------------------
 
 ENV["RAILS_ENV"] ||= ENV["RACK_ENV"] || "development"
 ENV["NODE_ENV"]  ||= "development"
