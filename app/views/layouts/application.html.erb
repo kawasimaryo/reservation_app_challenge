@@ -11,7 +11,24 @@
   </head>
 
   <body>
-    <%# ↓ この2行を追加して、通知メッセージを表示させる %>
+    <header>
+      <% if user_signed_in? %>
+        <%# ログインしている時の表示 %>
+        <span>ようこそ、<%= current_user.name %>さん</span>
+
+        <%# ↓↓↓ この行を追加する ↓↓↓ %>
+        <%= link_to "アカウント編集", edit_user_registration_path %>
+
+        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%# ログインしていない時の表示 %>
+        <%= link_to "新規登録", new_user_registration_path %>
+        <%= link_to "ログイン", new_user_session_path %>
+      <% end %>
+    </header>
+
+    <hr> <%# 区切り線 %>
+
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
 
