@@ -17,10 +17,10 @@
         <span>ようこそ、<%= current_user.name %>さん</span>
 
         <%# ↓↓↓ この行を追加する ↓↓↓ %>
+        <%= link_to "施設を登録する", new_room_path %>
+
         <%= link_to "プロフィール編集", profile_edit_user_path(current_user) %>
-
         <%= link_to "アカウント編集", edit_user_registration_path %>
-
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
       <% else %>
         <%# ログインしていない時の表示 %>

@@ -1,0 +1,21 @@
+<h1><%= @room.name %></h1>
+
+<p>
+  <strong>施設詳細:</strong>
+  <%= @room.description %>
+</p>
+
+<p>
+  <strong>料金（/日）:</strong>
+  <%= @room.price %>
+</p>
+
+<p>
+  <strong>住所:</strong>
+  <%= @room.address %>
+</p>
+
+<br>
+
+<%# 仕様書にあった「直前のページへ戻るためのリンク」 %>
+<%= link_to '一覧に戻る', rooms_path %>

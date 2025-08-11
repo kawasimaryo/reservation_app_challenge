@@ -1,0 +1,41 @@
+<h1>新しい施設を登録</h1>
+
+<%= form_with(model: @room, local: true) do |f| %>
+  <%# エラーメッセージがある場合に表示する %>
+  <% if @room.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
+      <ul>
+        <% @room.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "施設名" %><br />
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description, "施設詳細" %><br />
+    <%= f.text_area :description, rows: 5 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :price, "料金（/日）" %><br />
+    <%= f.number_field :price %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address, "住所" %><br />
+    <%= f.text_field :address %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "登録する" %>
+  </div>
+<% end %>
+
+<%= link_to '戻る', :back %>

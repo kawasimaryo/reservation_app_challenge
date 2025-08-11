@@ -1,0 +1,29 @@
+<h1>施設一覧</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>施設名</th>
+      <th>施設詳細</th>
+      <th>料金</th>
+      <th>住所</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rooms.each do |room| %>
+      <tr>
+        <%# ↓↓↓ この行を書き換える ↓↓↓ %>
+        <td><%= link_to room.name, room_path(room) %></td>
+        <td><%= room.description %></td>
+        <td><%= room.price %></td>
+        <td><%= room.address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新しい施設を登録', new_room_path %>
