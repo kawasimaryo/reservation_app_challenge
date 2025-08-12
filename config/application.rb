@@ -21,6 +21,9 @@ module ReservationAppChallenge
   class Application < Rails::Application
     config.load_defaults 6.1
 
+    # ↓↓↓ この行を追加する ↓↓↓
+    config.i18n.default_locale = :ja
+
     # 設定はここに書く
     config.generators.system_tests = nil
   end

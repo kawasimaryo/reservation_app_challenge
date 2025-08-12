@@ -1,17 +1,8 @@
 <h1>新しい施設を登録</h1>
 
 <%= form_with(model: @room, local: true) do |f| %>
-  <%# エラーメッセージがある場合に表示する %>
-  <% if @room.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@room.errors.count, "error") %> prohibited this room from being saved:</h2>
-      <ul>
-        <% @room.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%# ↓↓↓ この一行で、さっき作った共通パーツを呼び出す ↓↓↓ %>
+  <%= render 'shared/error_messages', model: @room %>
 
   <div class="field">
     <%= f.label :name, "施設名" %><br />

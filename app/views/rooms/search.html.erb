@@ -1,0 +1,46 @@
+<h1>施設検索</h1>
+
+<%= form_with(url: search_rooms_path, method: :get, local: true) do |f| %>
+  <div class="field">
+    <%= f.label :area, "エリア検索" %>
+    <%= f.text_field :area, value: @area, placeholder: "例：東京" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :keyword, "フリーワード検索" %>
+    <%= f.text_field :keyword, value: @keyword, placeholder: "例：綺麗な景色" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "検索" %>
+  </div>
+<% end %>
+
+<hr>
+
+<%# --- ここから下が検索結果表示 --- %>
+
+<% if @results.present? %>
+  <p>検索結果: 全<%= @results.count %>件</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>施設名</th>
+        <th>施設詳細</th>
+        <th>料金</th>
+        <th>住所</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @results.each do |room| %>
+        <tr>
+          <td><%= link_to room.name, room_path(room) %></td>
+          <td><%= room.description %></td>
+          <td><%= room.price %></td>
+          <td><%= room.address %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
