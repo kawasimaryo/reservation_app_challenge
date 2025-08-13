@@ -8,9 +8,9 @@ class RoomsController < ApplicationController
 
   def show
     @room = Room.find(params[:id])
+    @reservation = Reservation.new # ← この行を追加
   end
 
-  # ↓↓↓ このメソッドの中身を書き換える ↓↓↓
   def search
     # 検索フォームから送られてきたパラメータを取得
     @area = params[:area]

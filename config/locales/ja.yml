@@ -1,0 +1,89 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+    attributes:
+      user:
+        name: 名前
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+        current_password: "現在のパスワード"
+        remember_me: "ログイン状態を保持する"
+  errors:
+    messages:
+      not_saved:
+        one: "1件のエラーが発生したため %{resource} は保存されませんでした:"
+        other: "%{count} 件のエラーが発生したため %{resource} は保存されませんでした:"
+  helpers:
+    label:
+      user:
+        email: "メールアドレス"
+        password: "パスワード"
+        password_confirmation: "パスワード（確認用）"
+        current_password: "現在のパスワード"
+        remember_me: "ログイン状態を保持する"
+    submit:
+      create: 登録する
+      update: 更新する
+  devise:
+    confirmations:
+      confirmed: "アカウントを登録しました。"
+      send_instructions: "アカウントの登録方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "あなたのメールアドレスがデータベースに登録されている場合、アカウントの登録方法を記載したメールが数分以内に届きます。"
+    failure:
+      already_authenticated: "すでにログインしています。"
+      inactive: "アカウントがまだ有効化されていません。"
+      invalid: "メールアドレスかパスワードが違います。"
+      locked: "あなたのアカウントは凍結されています。"
+      last_attempt: "あなたのアカウントが凍結される前に、複数回の操作が可能です。"
+      not_found_in_database: "メールアドレスかパスワードが違います。"
+      timeout: "セッションがタイムアウトしました。もう一度ログインしてください。"
+      unauthenticated: "ログインまたは登録が必要です。"
+      unconfirmed: "本登録を行ってください。"
+    mailer:
+      confirmation_instructions:
+        subject: "アカウントの登録方法"
+      reset_password_instructions:
+        subject: "パスワードの再設定"
+      unlock_instructions:
+        subject: "アカウントの凍結解除"
+    passwords:
+      no_token: "このページにはパスワード再設定メールからアクセスしてください。再設定メールの有効期限が切れている場合は、もう一度再設定をリクエストしてください。"
+      send_instructions: "パスワードの再設定方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "あなたのメールアドレスがデータベースに登録されている場合、パスワード再設定用のリンクが記載されたメールが数分以内に届きます。"
+      updated: "パスワードが正しく変更されました。"
+      updated_not_active: "パスワードが正しく変更されました。"
+    registrations:
+      destroyed: "アカウントを削除しました。またのご利用をお待ちしております。"
+      signed_up: "アカウント登録が完了しました。"
+      signed_up_but_inactive: "登録は完了しましたが、アカウントがまだ有効化されていないため、ログインできませんでした。"
+      signed_up_but_locked: "登録は完了しましたが、アカウントが凍結されているため、ログインできませんでした。"
+      signed_up_but_unconfirmed: "確認メールをあなたのメールアドレスに送信しました。メールに記載されたリンクからアカウントを有効化させてください。"
+      update_needs_confirmation: "アカウント情報が正しく更新されました。新しいメールアドレスの確認のため、確認メールを送信しました。メールに記載されたリンクを開いて、新しいメールアドレスを有効にしてください。"
+      updated: "アカウント情報を変更しました。"
+      edit:
+        title: "ユーザー情報編集"
+        leave_blank_if_you_don_t_want_to_change_it: "（変更しない場合は空欄のままにしてください）"
+        we_need_your_current_password_to_confirm_your_changes: "（変更を確認するには現在のパスワードが必要です）"
+        update: "更新"
+        cancel_my_account: "アカウントを削除"
+        unhappy: "アカウントを削除しますか"
+        are_you_sure: "本当によろしいですか？"
+    sessions:
+      signed_in: "ログインしました。"
+      signed_out: "ログアウトしました。"
+      already_signed_out: "すでにログアウトしています。"
+      new:
+        sign_in: "ログイン"
+    unlocks:
+      send_instructions: "アカウントの凍結を解除する方法を数分以内にメールでご連絡します。"
+      send_paranoid_instructions: "あなたのアカウントが存在する場合、アカウントの凍結を解除する方法を記載したメールが数分以内に届きます。"
+      unlocked: "アカウントの凍結が解除されました。ログインして処理を続けてください。"
+    shared:
+      minimum_password_length: "%{count}文字以上"
+      links:
+        back: "戻る"
+        sign_in: "ログイン"
+        sign_up: "新規登録"
+        forgot_your_password: "パスワードを忘れましたか？"

@@ -15,7 +15,33 @@
   <%= @room.address %>
 </p>
 
+<hr> <%# 区切り線 %>
+
+<%# --- ここから下が予約フォーム --- %>
+<h2>この施設を予約する</h2>
+
+<%= form_with(model: [@room, @reservation], local: true) do |f| %>
+  <div class="field">
+    <%= f.label :start_date, "チェックイン日" %><br />
+    <%= f.date_field :start_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :end_date, "チェックアウト日" %><br />
+    <%= f.date_field :end_date %>
+  </div>
+
+  <div class="field">
+    <%= f.label :people_count, "人数" %><br />
+    <%= f.number_field :people_count %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "予約する" %>
+  </div>
+<% end %>
+
+
 <br>
 
-<%# 仕様書にあった「直前のページへ戻るためのリンク」 %>
 <%= link_to '一覧に戻る', rooms_path %>
