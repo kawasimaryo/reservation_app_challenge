@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+      <th>画像</th>
       <th>施設名</th>
       <th>施設詳細</th>
       <th>料金</th>
@@ -14,7 +15,8 @@
   <tbody>
     <% @rooms.each do |room| %>
       <tr>
-        <%# ↓↓↓ この行を書き換える ↓↓↓ %>
+        <%# ↓↓↓ この行のファイル名に .png を追加する ↓↓↓ %>
+        <td><%= image_tag room.image.presence || 'default-image-4-1024x1024-2x.09d.png', size: "100x100" %></td>
         <td><%= link_to room.name, room_path(room) %></td>
         <td><%= room.description %></td>
         <td><%= room.price %></td>

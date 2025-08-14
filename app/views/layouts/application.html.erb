@@ -13,12 +13,11 @@
   <body>
     <header>
       <% if user_signed_in? %>
-        <%# ログインしている時の表示 %>
+        <%# ↓↓↓ この行のファイル名を修正する ↓↓↓ %>
+        <%= image_tag current_user.image.presence || 'default-avatar-7a6cbfd7993e89f24bfc888f4a035a83c6f1428b8bdc47eed9095f2799a40153.png', size: "40x40" %>
+
         <span>ようこそ、<%= current_user.name %>さん</span>
-
-        <%# ↓↓↓ この行を追加する ↓↓↓ %>
         <%= link_to "施設を登録する", new_room_path %>
-
         <%= link_to "プロフィール編集", profile_edit_user_path(current_user) %>
         <%= link_to "アカウント編集", edit_user_registration_path %>
         <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
@@ -29,10 +28,10 @@
       <% end %>
     </header>
 
-    <hr> <%# 区切り線 %>
+    <hr>
 
     <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <p class="alert"><p class="alert"><%= alert %></p>
 
     <%= yield %>
   </body>

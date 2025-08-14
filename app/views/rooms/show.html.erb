@@ -1,3 +1,5 @@
+<p><%= image_tag @room.image.presence || 'default-image-4e0ac6b8d01335b5b22fe6586af13644ae51dddb6aeabf35b9174e80f13cd09d.png', size: "300x300" %></p>
+
 <h1><%= @room.name %></h1>
 
 <p>
@@ -20,7 +22,6 @@
 <h2>この施設を予約する</h2>
 
 <%= form_with(url: new_room_reservation_path(@room), method: :get, local: true) do |f| %>
-  <%# ↓↓↓ この行を修正する ↓↓↓ %>
   <%= render 'shared/error_messages', model: @reservation %>
 
   <div class="field">
