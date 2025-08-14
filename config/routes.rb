@@ -9,12 +9,14 @@ Rails.application.routes.draw do
     end
   end
   
-  # ↓↓↓ この部分を書き換える ↓↓↓
   resources :rooms do
+    # ↓↓↓ この行を追加する ↓↓↓
+    resources :reservations, only: [:create]
+
     collection do
       get 'search'
     end
   end
 
-  resources :reservations
+  # resources :reservations # ← この行は削除する
 end

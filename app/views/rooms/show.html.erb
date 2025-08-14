@@ -15,12 +15,14 @@
   <%= @room.address %>
 </p>
 
-<hr> <%# 区切り線 %>
+<hr>
 
-<%# --- ここから下が予約フォーム --- %>
 <h2>この施設を予約する</h2>
 
 <%= form_with(model: [@room, @reservation], local: true) do |f| %>
+  <%# ↓↓↓ この一行を追加する ↓↓↓ %>
+  <%= render 'shared/error_messages', model: f.object %>
+
   <div class="field">
     <%= f.label :start_date, "チェックイン日" %><br />
     <%= f.date_field :start_date %>
@@ -40,7 +42,6 @@
     <%= f.submit "予約する" %>
   </div>
 <% end %>
-
 
 <br>
 

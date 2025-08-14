@@ -1,45 +1,32 @@
-<!-- app/views/reservations/index.html.erb -->
-<h1>予約一覧</h1>
-
-<% if notice.present? %>
-  <p class="notice"><%= notice %></p>
-<% end %>
+<h1>あなたの予約一覧</h1>
 
 <% if @reservations.any? %>
   <table>
     <thead>
       <tr>
-        <th>ユーザー</th>
-        <th>部屋</th>
+        <th>施設名</th>
         <th>チェックイン</th>
         <th>チェックアウト</th>
-        <th colspan="2">操作</th>
+        <th>人数</th>
+        <th>合計料金</th>
       </tr>
     </thead>
+
     <tbody>
       <% @reservations.each do |reservation| %>
         <tr>
-          <td><%= reservation.user&.name %></td>
-          <td><%= reservation.room&.name %></td>
-          <td><%= reservation.start_date&.strftime('%Y/%m/%d') %></td>
-          <td><%= reservation.end_date&.strftime('%Y/%m/%d') %></td>
+          <td><%= link_to reservation.room.name, room_path(reservation.room) %></td>
+          <td><%= reservation.start_date.strftime("%Y/%m/%d") %></td>
+          <td><%= reservation.end_date.strftime("%Y/%m/%d") %></td>
+          <td><%= reservation.people_count %> 人</td>
           <td>
-            <%= link_to '編集', edit_reservation_path(reservation) %>
-          </td>
-          <td>
-            <%= button_to '削除',
-                          reservation_path(reservation),
-                          method: :delete,
-                          data: { confirm: '本当に削除しますか？' } %>
+            <%# 料金計算: (チェックアウト日 - チェックイン日) * 人数 * 施設の料金 %>
+            <%= ((reservation.end_date - reservation.start_date).to_i * reservation.people_count * reservation.room.price).to_s(:delimited) %> 円
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  <p>予約はまだありません。</p>
+  <p>まだ予約はありません。</p>
 <% end %>
-
-<div style="margin-top: 1rem;">
-  <%= link_to '新規予約作成', new_reservation_path %>
-</div>
