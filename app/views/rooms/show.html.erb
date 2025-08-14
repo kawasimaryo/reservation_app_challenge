@@ -19,9 +19,9 @@
 
 <h2>この施設を予約する</h2>
 
-<%= form_with(model: [@room, @reservation], local: true) do |f| %>
-  <%# ↓↓↓ この一行を追加する ↓↓↓ %>
-  <%= render 'shared/error_messages', model: f.object %>
+<%= form_with(url: new_room_reservation_path(@room), method: :get, local: true) do |f| %>
+  <%# ↓↓↓ この行を修正する ↓↓↓ %>
+  <%= render 'shared/error_messages', model: @reservation %>
 
   <div class="field">
     <%= f.label :start_date, "チェックイン日" %><br />
@@ -39,7 +39,7 @@
   </div>
 
   <div class="actions">
-    <%= f.submit "予約する" %>
+    <%= f.submit "予約内容の確認へ" %>
   </div>
 <% end %>
 

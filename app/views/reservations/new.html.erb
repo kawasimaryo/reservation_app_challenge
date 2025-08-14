@@ -1,45 +1,38 @@
-<h1>新規予約作成</h1>
+<%# --- ここからデバッグ情報 --- %>
+<div style="background-color: #ffc; padding: 1em; border: 1px solid #ccc;">
+  <h3>デバッグ情報</h3>
+  <p>@reservation.start_date: <%= @reservation.start_date.inspect %></p>
+  <p>@reservation.end_date: <%= @reservation.end_date.inspect %></p>
+  <p>計算前のdays: <%= (@reservation.end_date - @reservation.start_date).inspect %></p>
+  <p>計算後のdays (.to_i): <%= (@reservation.end_date - @reservation.start_date).to_i.inspect %></p>
+  <p>@reservation.people_count: <%= @reservation.people_count.inspect %></p>
+  <p>@room.price: <%= @room.price.inspect %></p>
+</div>
+<%# --- ここまでデバッグ情報 --- %>
 
-<%= form_with(model: @reservation, local: true) do |form| %>
-  <% if @reservation.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@reservation.errors.count, "件のエラー") %>があります:</h2>
-      <ul>
-        <% @reservation.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<h1>予約内容の確認</h1>
 
-  <div>
-    <%= form.label :user_id, "ユーザー" %><br>
-    <%= form.collection_select :user_id, @users || [], :id, :name, prompt: "ユーザーを選択" %>
-  </div>
+<% 
+  days = (@reservation.end_date - @reservation.start_date).to_i
+  total_price = days * @reservation.people_count.to_i * @room.price.to_i
+%>
 
-  <div>
-    <%= form.label :room_id, "部屋" %><br>
-    <%= form.collection_select :room_id, @rooms || [], :id, :name, prompt: "部屋を選択" %>
-  </div>
+<p><strong>施設名:</strong> <%= @room.name %></p>
+<p><strong>チェックイン日:</strong> <%= @reservation.start_date.strftime("%Y/%m/%d") %></p>
+<p><strong>チェックアウト日:</strong> <%= @reservation.end_date.strftime("%Y/%m/%d") %></p>
+<p><strong>人数:</strong> <%= @reservation.people_count %> 人</p>
+<p><strong>宿泊日数:</strong> <%= days %> 泊</p>
+<p><strong>合計金額:</strong> <%= total_price.to_s(:delimited) %> 円</p>
 
-  <div>
-    <%= form.label :start_date, "チェックイン日" %><br>
-    <%= form.date_field :start_date %>
-  </div>
+<hr>
 
-  <div>
-    <%= form.label :end_date, "チェックアウト日" %><br>
-    <%= form.date_field :end_date %>
-  </div>
-
-  <div>
-    <%= form.label :people_count, "人数" %><br>
-    <%= form.number_field :people_count, min: 1 %>
-  </div>
-
-  <div>
-    <%= form.submit "予約する" %>
-  </div>
+<%# このフォームが、最終的な予約作成(create)アクションにデータを送る %>
+<%= form_with(model: [@room, @reservation], local: true) do |f| %>
+  <%= f.hidden_field :start_date, value: @reservation.start_date %>
+  <%= f.hidden_field :end_date, value: @reservation.end_date %>
+  <%= f.hidden_field :people_count, value: @reservation.people_count %>
+  <%= f.submit "この内容で予約を確定する" %>
 <% end %>
 
-<%= link_to '戻る', reservations_path %>
+<br>
+<%= link_to "施設詳細に戻る", room_path(@room) %>
