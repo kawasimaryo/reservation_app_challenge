@@ -87,3 +87,11 @@ ja:
         sign_in: "ログイン"
         sign_up: "新規登録"
         forgot_your_password: "パスワードを忘れましたか？"
+  
+  # --- ここから下を追加 ---
+  time:
+    formats:
+      default: "%Y/%m/%d %H:%M"
+  date:
+    formats:
+      default: "%Y/%m/%d"

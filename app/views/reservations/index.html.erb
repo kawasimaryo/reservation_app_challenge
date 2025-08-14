@@ -16,8 +16,9 @@
       <% @reservations.each do |reservation| %>
         <tr>
           <td><%= link_to reservation.room.name, room_path(reservation.room) %></td>
-          <td><%= reservation.start_date.strftime("%Y/%m/%d") %></td>
-          <td><%= reservation.end_date.strftime("%Y/%m/%d") %></td>
+          <%# ↓↓↓ この2行を修正する ↓↓↓ %>
+          <td><%= l reservation.start_date %></td>
+          <td><%= l reservation.end_date %></td>
           <td><%= reservation.people_count %> 人</td>
           <td>
             <%# 料金計算: (チェックアウト日 - チェックイン日) * 人数 * 施設の料金 %>

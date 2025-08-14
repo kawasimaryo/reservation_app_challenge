@@ -1,15 +1,3 @@
-<%# --- ここからデバッグ情報 --- %>
-<div style="background-color: #ffc; padding: 1em; border: 1px solid #ccc;">
-  <h3>デバッグ情報</h3>
-  <p>@reservation.start_date: <%= @reservation.start_date.inspect %></p>
-  <p>@reservation.end_date: <%= @reservation.end_date.inspect %></p>
-  <p>計算前のdays: <%= (@reservation.end_date - @reservation.start_date).inspect %></p>
-  <p>計算後のdays (.to_i): <%= (@reservation.end_date - @reservation.start_date).to_i.inspect %></p>
-  <p>@reservation.people_count: <%= @reservation.people_count.inspect %></p>
-  <p>@room.price: <%= @room.price.inspect %></p>
-</div>
-<%# --- ここまでデバッグ情報 --- %>
-
 <h1>予約内容の確認</h1>
 
 <% 
@@ -18,8 +6,9 @@
 %>
 
 <p><strong>施設名:</strong> <%= @room.name %></p>
-<p><strong>チェックイン日:</strong> <%= @reservation.start_date.strftime("%Y/%m/%d") %></p>
-<p><strong>チェックアウト日:</strong> <%= @reservation.end_date.strftime("%Y/%m/%d") %></p>
+<%# ↓↓↓ この2行を修正する ↓↓↓ %>
+<p><strong>チェックイン日:</strong> <%= l @reservation.start_date %></p>
+<p><strong>チェックアウト日:</strong> <%= l @reservation.end_date %></p>
 <p><strong>人数:</strong> <%= @reservation.people_count %> 人</p>
 <p><strong>宿泊日数:</strong> <%= days %> 泊</p>
 <p><strong>合計金額:</strong> <%= total_price.to_s(:delimited) %> 円</p>
