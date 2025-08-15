@@ -14,15 +14,38 @@
 
     <tbody>
       <% @reservations.each do |reservation| %>
+        <%# --- 計算前に型をそろえる（必ず数値/Dateに） --- %>
+        <% nights = (reservation.end_date.to_date - reservation.start_date.to_date).to_i %>
+        <% people = reservation.people_count.to_i %>
+
+        <% raw_price =
+             if reservation.room.respond_to?(:price_cents) && reservation.room.price_cents.present?
+               reservation.room.price_cents
+             else
+               reservation.room&.price
+             end %>
+
+        <% price =
+             case raw_price
+             when Numeric then raw_price.to_i
+             when String  then raw_price.gsub(/[^\d]/, "").to_i  # "10,000円" なども数値化
+             else               (raw_price.to_i rescue 0)
+             end %>
+
+        <% total = nights * people * price %>
+
         <tr>
           <td><%= link_to reservation.room.name, room_path(reservation.room) %></td>
-          <%# ↓↓↓ この2行を修正する ↓↓↓ %>
           <td><%= l reservation.start_date %></td>
           <td><%= l reservation.end_date %></td>
-          <td><%= reservation.people_count %> 人</td>
+          <td><%= people %> 人</td>
           <td>
-            <%# 料金計算: (チェックアウト日 - チェックイン日) * 人数 * 施設の料金 %>
-            <%= ((reservation.end_date - reservation.start_date).to_i * reservation.people_count * reservation.room.price).to_s(:delimited) %> 円
+            <%= number_to_currency(
+                  total,
+                  unit: "¥",
+                  precision: 0,
+                  round_mode: :default   # i18n由来の"round_mode"文字列対策
+                ) %>
           </td>
         </tr>
       <% end %>
@@ -31,3 +54,4 @@
 <% else %>
   <p>まだ予約はありません。</p>
 <% end %>
+

@@ -18,8 +18,6 @@
 
 <hr>
 
-<%# --- ここから下が検索結果表示 --- %>
-
 <% if @results.present? %>
   <p>検索結果: 全<%= @results.count %>件</p>
 
@@ -37,7 +35,7 @@
         <tr>
           <td><%= link_to room.name, room_path(room) %></td>
           <td><%= room.description %></td>
-          <td><%= room.price %></td>
+          <td><%= number_to_currency(room.price.to_i) %></td>
           <td><%= room.address %></td>
         </tr>
       <% end %>

@@ -9,7 +9,7 @@
 
 <p>
   <strong>料金（/日）:</strong>
-  <%= @room.price %>
+  <%= number_to_currency(@room.price.to_i) %>
 </p>
 
 <p>

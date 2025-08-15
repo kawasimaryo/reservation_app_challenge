@@ -15,11 +15,11 @@
   <tbody>
     <% @rooms.each do |room| %>
       <tr>
-        <%# ↓↓↓ この行のファイル名に .png を追加する ↓↓↓ %>
         <td><%= image_tag room.image.presence || 'default-image-4-1024x1024-2x.09d.png', size: "100x100" %></td>
         <td><%= link_to room.name, room_path(room) %></td>
         <td><%= room.description %></td>
-        <td><%= room.price %></td>
+        <%# ↓↓↓ この行を修正する ↓↓↓ %>
+        <td><%= number_to_currency(room.price) %></td>
         <td><%= room.address %></td>
       </tr>
     <% end %>
