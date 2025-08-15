@@ -1,0 +1,32 @@
+<h1>施設情報の編集</h1>
+
+<%= form_with(model: @room, local: true) do |f| %>
+  <%= render 'shared/error_messages', model: f.object %>
+
+  <div class="field">
+    <%= f.label :name, "施設名" %><br />
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description, "施設詳細" %><br />
+    <%= f.text_area :description, rows: 5 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :price, "料金（/日）" %><br />
+    <%# ↓↓↓ この行を number_field に修正する ↓↓↓ %>
+    <%= f.number_field :price %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address, "住所" %><br />
+    <%= f.text_field :address %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<%= link_to '詳細に戻る', room_path(@room) %>

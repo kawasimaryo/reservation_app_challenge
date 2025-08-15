@@ -1,4 +1,4 @@
-<p><%= image_tag @room.image.presence || 'default-image-4e0ac6b8d01335b5b22fe6586af13644ae51dddb6aeabf35b9174e80f13cd09d.png', size: "300x300" %></p>
+<p><%= image_tag(@room.image.presence || 'default-image-4e0ac6b8d01335b5b22fe6586af13644ae51dddb6aeabf35b9174e80f13cd09d.png', size: "300x300") %></p>
 
 <h1><%= @room.name %></h1>
 
@@ -9,7 +9,16 @@
 
 <p>
   <strong>料金（/日）:</strong>
-  <%= number_to_currency(@room.price.to_i) %>
+  <%= number_to_currency(
+        # price_cents があれば優先、なければ price を数字だけ抽出
+        (@room.respond_to?(:price_cents) && @room.price_cents.present? ?
+           @room.price_cents :
+           @room.price.to_s.gsub(/[^\d]/, '').to_i
+        ),
+        unit: "¥",
+        precision: 0,
+        round_mode: :default   # 念のため明示（初期化子を入れていても冪等）
+      ) %>
 </p>
 
 <p>
@@ -45,5 +54,11 @@
 <% end %>
 
 <br>
+
+<% if @room.user == current_user %>
+  <hr>
+  <%= link_to '施設情報を編集する', edit_room_path(@room) %> |
+  <%= link_to '施設を削除する', room_path(@room), method: :delete, data: { confirm: '本当に削除しますか？' } %>
+<% end %>
 
 <%= link_to '一覧に戻る', rooms_path %>

@@ -1,33 +1,20 @@
 class RoomsController < ApplicationController
-  # ログインしていないユーザーをログインページに飛ばす
-  before_action :authenticate_user!, except: [:search] # searchアクションはログイン不要にする
+  before_action :authenticate_user!, except: [:search]
+  before_action :set_room, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user, only: [:edit, :update, :destroy]
 
   def index
-    @rooms = Room.where(user_id: current_user.id)
+    @rooms = current_user.rooms
   end
 
   def show
-    @room = Room.find(params[:id])
-    @reservation = Reservation.new # ← この行を追加
+    @reservation = Reservation.new
   end
 
   def search
-    # 検索フォームから送られてきたパラメータを取得
-    @area = params[:area]
-    @keyword = params[:keyword]
-
-    # まず、全ての施設を対象にする
     @results = Room.all
-
-    # エリア検索のパラメータがあれば、住所(address)であいまい検索
-    if @area.present?
-      @results = @results.where("address LIKE ?", "%#{@area}%")
-    end
-
-    # フリーワード検索のパラメータがあれば、施設名(name)と施設詳細(description)であいまい検索
-    if @keyword.present?
-      @results = @results.where("name LIKE ? OR description LIKE ?", "%#{@keyword}%", "%#{@keyword}%")
-    end
+    @results = @results.where("address LIKE ?", "%#{params[:area]}%") if params[:area].present?
+    @results = @results.where("name LIKE ? OR description LIKE ?", "%#{params[:keyword]}%", "%#{params[:keyword]}%") if params[:keyword].present?
   end
 
   def new
@@ -35,20 +22,44 @@ class RoomsController < ApplicationController
   end
 
   def create
-    @room = Room.new(room_params)
-    # ログインしているユーザーのIDを、施設のuser_idに保存する
-    @room.user_id = current_user.id
+    @room = current_user.rooms.build(room_params)
     if @room.save
-      redirect_to rooms_path, notice: '施設を登録しました。'
+      redirect_to @room, notice: '施設を登録しました。'
     else
       render :new
     end
   end
 
+  # --- ここから下が追加・修正部分 ---
+
+  def edit
+    # @roomはbefore_actionで設定済み
+  end
+
+  def update
+    if @room.update(room_params)
+      redirect_to @room, notice: '施設情報を更新しました。'
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @room.destroy
+    redirect_to rooms_path, notice: '施設を削除しました。'
+  end
+
   private
 
+  def set_room
+    @room = Room.find(params[:id])
+  end
+
+  def authorize_user
+    redirect_to root_path, alert: '権限がありません。' unless @room.user == current_user
+  end
+
   def room_params
-    # 施設登録で許可するパラメータ
-    params.require(:room).permit(:name, :description, :price, :address)
+    params.require(:room).permit(:name, :description, :price, :address, :image)
   end
 end
