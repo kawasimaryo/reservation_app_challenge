@@ -1,27 +1,27 @@
 <h1>新しい施設を登録</h1>
 
 <%= form_with(model: @room, local: true) do |f| %>
-  <%# ↓↓↓ この一行で、さっき作った共通パーツを呼び出す ↓↓↓ %>
+  <!-- 共通エラーメッセージ -->
   <%= render 'shared/error_messages', model: @room %>
 
   <div class="field">
     <%= f.label :name, "施設名" %><br />
-    <%= f.text_field :name %>
+    <%= f.text_field :name, required: true %>
   </div>
 
   <div class="field">
     <%= f.label :description, "施設詳細" %><br />
-    <%= f.text_area :description, rows: 5 %>
+    <%= f.text_area :description, rows: 5, required: true %>
   </div>
 
   <div class="field">
     <%= f.label :price, "料金（/日）" %><br />
-    <%= f.number_field :price %>
+    <%= f.number_field :price, min: 1, step: 1000, required: true %>
   </div>
 
   <div class="field">
     <%= f.label :address, "住所" %><br />
-    <%= f.text_field :address %>
+    <%= f.text_field :address, required: true %>
   </div>
 
   <div class="actions">
@@ -29,4 +29,6 @@
   </div>
 <% end %>
 
-<%= link_to '戻る', :back %>
+<p style="margin-top:12px;">
+  <%= link_to '戻る', (request.referer || rooms_path) %>
+</p>

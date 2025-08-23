@@ -1,4 +1,10 @@
-<p><%= image_tag(@room.image.presence || 'default-image-4e0ac6b8d01335b5b22fe6586af13644ae51dddb6aeabf35b9174e80f13cd09d.png', size: "300x300") %></p>
+<p>
+  <%= image_tag(
+        (@room.image.attached? ? @room.image : "default_room.png"),
+        alt: @room.name,
+        width: 300, height: 300
+      ) %>
+</p>
 
 <h1><%= @room.name %></h1>
 
@@ -9,16 +15,7 @@
 
 <p>
   <strong>料金（/日）:</strong>
-  <%= number_to_currency(
-        # price_cents があれば優先、なければ price を数字だけ抽出
-        (@room.respond_to?(:price_cents) && @room.price_cents.present? ?
-           @room.price_cents :
-           @room.price.to_s.gsub(/[^\d]/, '').to_i
-        ),
-        unit: "¥",
-        precision: 0,
-        round_mode: :default   # 念のため明示（初期化子を入れていても冪等）
-      ) %>
+  <%= "¥#{number_with_delimiter(@room.price.to_i)}" %>
 </p>
 
 <p>
@@ -30,22 +27,22 @@
 
 <h2>この施設を予約する</h2>
 
-<%= form_with(url: new_room_reservation_path(@room), method: :get, local: true) do |f| %>
-  <%= render 'shared/error_messages', model: @reservation %>
+<%= form_with url: new_room_reservation_path(@room), method: :get, local: true do |f| %>
+  <%= render "shared/error_messages", model: @reservation %>
 
   <div class="field">
-    <%= f.label :start_date, "チェックイン日" %><br />
-    <%= f.date_field :start_date %>
+    <%= f.label :start_date, "チェックイン日" %><br>
+    <%= f.date_field :start_date, required: true %>
   </div>
 
   <div class="field">
-    <%= f.label :end_date, "チェックアウト日" %><br />
-    <%= f.date_field :end_date %>
+    <%= f.label :end_date, "チェックアウト日" %><br>
+    <%= f.date_field :end_date, required: true %>
   </div>
 
   <div class="field">
-    <%= f.label :people_count, "人数" %><br />
-    <%= f.number_field :people_count %>
+    <%= f.label :people_count, "人数" %><br>
+    <%= f.number_field :people_count, min: 1, step: 1, required: true %>
   </div>
 
   <div class="actions">
@@ -55,10 +52,14 @@
 
 <br>
 
-<% if @room.user == current_user %>
+<% if user_signed_in? && @room.user_id == current_user.id %>
   <hr>
-  <%= link_to '施設情報を編集する', edit_room_path(@room) %> |
-  <%= link_to '施設を削除する', room_path(@room), method: :delete, data: { confirm: '本当に削除しますか？' } %>
+  <%= link_to "施設情報を編集する", edit_room_path(@room) %> |
+  <%= link_to "施設を削除する", room_path(@room),
+              method: :delete,
+              data: { confirm: "施設を削除しますか？" } %>
 <% end %>
 
-<%= link_to '一覧に戻る', rooms_path %>
+<p style="margin-top: 12px;">
+  <%= link_to "戻る", (request.referer || rooms_path) %>
+</p>

@@ -8,15 +8,15 @@ Rails.application.routes.draw do
       patch 'profile_update'
     end
   end
-  
+
   resources :rooms do
-    # ↓↓↓ この行を書き換える ↓↓↓
-    resources :reservations, only: [:new, :create]
+    resources :reservations, only: [:new, :create] # 施設ごとの予約作成
 
     collection do
       get 'search'
     end
   end
 
-  # resources :reservations # ← この行は削除する
+  # ユーザーの予約一覧用トップレベルルートを追加
+  resources :reservations, only: [:index]
 end
