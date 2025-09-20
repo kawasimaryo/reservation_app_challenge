@@ -10,10 +10,17 @@
   <!-- プロフィール画像 -->
   <div class="field">
     <%= f.label :avatar, "プロフィール画像" %><br>
-    <%= image_tag(resource.avatar.attached? ? resource.avatar : "default_avatar.png",
-                  alt: "現在のアイコン", width: 100, height: 100,
-                  style: "border-radius:50%;object-fit:cover;" ) %><br>
-    <%= f.file_field :avatar, accept: "image/*" %>
+    <%= image_tag(
+          (resource.avatar.attached? ? resource.avatar : "default_avatar.png"),
+          id: "avatar-preview",
+          alt: "現在のアイコン",
+          width: 100, height: 100,
+          style: "border-radius:50%;object-fit:cover;"
+        ) %><br>
+    <%= f.file_field :avatar,
+          accept: "image/*",
+          data: { preview_target: "#avatar-preview" } %>
+    <!-- ↑ ここでファイル選択時に #avatar-preview を差し替えます（application.js のプレビュー機能） -->
   </div>
 
   <!-- 名前 -->

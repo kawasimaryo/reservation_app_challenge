@@ -4,19 +4,16 @@ Rails.application.routes.draw do
 
   resources :users do
     member do
-      get 'profile_edit'
-      patch 'profile_update'
+      get  :profile_edit
+      patch :profile_update
+      get  :account        # ←これを追加
     end
   end
 
   resources :rooms do
-    resources :reservations, only: [:new, :create] # 施設ごとの予約作成
-
-    collection do
-      get 'search'
-    end
+    collection { get :search }
+    resources :reservations, only: [:new, :create, :destroy]
   end
 
-  # ユーザーの予約一覧用トップレベルルートを追加
   resources :reservations, only: [:index]
 end

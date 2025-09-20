@@ -32,17 +32,28 @@
 
   <div class="field">
     <%= f.label :start_date, "チェックイン日" %><br>
-    <%= f.date_field :start_date, required: true %>
+    <%= f.date_field :start_date,
+          required: true,
+          min: Date.current,
+          value: params[:start_date],
+          data: { behavior: "checkin" } %>
+    <%# application.js が min を同期します %>
   </div>
 
   <div class="field">
     <%= f.label :end_date, "チェックアウト日" %><br>
-    <%= f.date_field :end_date, required: true %>
+    <%= f.date_field :end_date,
+          required: true,
+          value: params[:end_date],
+          data: { behavior: "checkout" } %>
+    <%# application.js が min をチェックイン+1日に設定します %>
   </div>
 
   <div class="field">
     <%= f.label :people_count, "人数" %><br>
-    <%= f.number_field :people_count, min: 1, step: 1, required: true %>
+    <%= f.number_field :people_count,
+          min: 1, step: 1, required: true,
+          value: (params[:people_count].presence || 1) %>
   </div>
 
   <div class="actions">

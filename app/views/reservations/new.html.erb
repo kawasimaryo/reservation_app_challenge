@@ -1,25 +1,17 @@
 <h1>予約内容の確認</h1>
 
-<% 
-  days = (@reservation.end_date - @reservation.start_date).to_i
-  total_price = days * @reservation.people_count.to_i * @room.price.to_i
-%>
-
 <p><strong>施設名:</strong> <%= @room.name %></p>
 <p><strong>チェックイン日:</strong> <%= l @reservation.start_date %></p>
 <p><strong>チェックアウト日:</strong> <%= l @reservation.end_date %></p>
 <p><strong>人数:</strong> <%= @reservation.people_count %> 人</p>
-<p><strong>宿泊日数:</strong> <%= days %> 泊</p>
-
-<%# ↓↓↓ この行を修正する ↓↓↓ %>
-<p><strong>合計金額:</strong> <%= number_to_currency(total_price) %></p>
+<p><strong>宿泊日数:</strong> <%= @days %> 泊</p>
+<p><strong>合計金額:</strong> ¥<%= number_with_delimiter(@total_price.to_i) %></p>
 
 <hr>
 
-<%# このフォームが、最終的な予約作成(create)アクションにデータを送る %>
 <%= form_with(model: [@room, @reservation], local: true) do |f| %>
-  <%= f.hidden_field :start_date, value: @reservation.start_date %>
-  <%= f.hidden_field :end_date, value: @reservation.end_date %>
+  <%= f.hidden_field :start_date,   value: @reservation.start_date %>
+  <%= f.hidden_field :end_date,     value: @reservation.end_date %>
   <%= f.hidden_field :people_count, value: @reservation.people_count %>
   <%= f.submit "この内容で予約を確定する" %>
 <% end %>

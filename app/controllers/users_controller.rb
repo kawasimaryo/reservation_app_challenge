@@ -1,30 +1,38 @@
-# app/controllers/users_controller.rb
 class UsersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :set_user, only: [:profile_edit, :profile_update, :account]
+  before_action :authorize_user!, only: [:profile_edit, :profile_update, :account]
+
   def index
     @users = User.all
   end
 
-  # --- ここから下を追加 ---
+  # プロフィール編集
+  def profile_edit; end
 
-  # プロフィール編集画面を表示するアクション
-  def profile_edit
-    @user = User.find(params[:id])
-  end
-
-  # プロフィール更新処理を行うアクション
   def profile_update
-    @user = User.find(params[:id])
-    if @user.update(user_params)
+    if @user.update(user_profile_params)
       redirect_to reservations_path, notice: 'プロフィールを更新しました。'
     else
       render :profile_edit
     end
   end
 
+  # アカウントページ（メール表示、パスワードは*******）
+  def account; end
+
   private
 
-  # Strong Parameters（更新を許可する項目）
-  def user_params
-    params.require(:user).permit(:name, :introduction, :image)
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def authorize_user!
+    redirect_to root_path, alert: '権限がありません。' unless @user == current_user
+  end
+
+  # Strong Params（avatar を許可。:image ではなく :avatar）
+  def user_profile_params
+    params.require(:user).permit(:name, :introduction, :avatar)
   end
 end

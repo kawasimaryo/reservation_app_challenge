@@ -18,27 +18,33 @@
 
 <hr>
 
-<% if @results.present? %>
-  <p>検索結果: 全<%= @results.count %>件</p>
+<% if defined?(@total) %>
+  <p>検索結果: 全<%= @total %>件</p>
+<% end %>
 
+<% if @rooms.present? %>
   <table>
     <thead>
       <tr>
         <th>施設名</th>
-        <th>施設詳細</th>
-        <th>料金</th>
         <th>住所</th>
+        <th>施設詳細</th>
+        <th>料金 (/日)</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <% @results.each do |room| %>
+      <% @rooms.each do |room| %>
         <tr>
           <td><%= link_to room.name, room_path(room) %></td>
-          <td><%= room.description %></td>
-          <td><%= number_to_currency(room.price.to_i) %></td>
           <td><%= room.address %></td>
+          <td><%= room.description %></td>
+          <td><%= "¥#{number_with_delimiter(room.price.to_i)}" %></td>
+          <td><%= link_to "詳細", room_path(room) %></td>
         </tr>
       <% end %>
     </tbody>
   </table>
+<% elsif @area.present? || @keyword.present? %>
+  <p>該当する施設はありませんでした。</p>
 <% end %>

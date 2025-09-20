@@ -87,7 +87,7 @@ ja:
         sign_in: "ログイン"
         sign_up: "新規登録"
         forgot_your_password: "パスワードを忘れましたか？"
-  
+
   # --- ここから下を追加 ---
   time:
     formats:
@@ -95,3 +95,15 @@ ja:
   date:
     formats:
       default: "%Y/%m/%d"
+  number:
+    format:
+      precision: 0       # 追加：数値で定義（上書き防止）
+      separator: "."
+      delimiter: ","
+    currency:
+      format:
+        format: "%u%n"
+        unit: "¥"
+        separator: "."
+        delimiter: ","
+        precision: 0

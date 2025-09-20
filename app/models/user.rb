@@ -1,20 +1,19 @@
 class User < ApplicationRecord
-  # Devise
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # ---- Associations ----
-  # オーナーとして「自分が作成した施設」
   has_many :rooms, dependent: :destroy, inverse_of: :user
-
-  # 借りる側としての予約
   has_many :reservations, dependent: :destroy
-
-  # （任意）自分が「予約した施設」を参照したいときの別名
-  # current_user.booked_rooms で取得できる
   has_many :booked_rooms, through: :reservations, source: :room
 
-  # ---- Avatar（ユーザーアイコン）----
-  # Active Storage を利用して1つの画像を添付できる
   has_one_attached :avatar
+
+  # ▼ ここから追加（2-2）
+  validates :name, presence: true
+
+  # Devise は email と password の存在・形式は見るが、
+  # 「確認用の空」を落としきれないことがあるので create では明示的に必須にする
+  validates :password, presence: true, confirmation: true, on: :create
+  validates :password_confirmation, presence: true, on: :create
 end
+

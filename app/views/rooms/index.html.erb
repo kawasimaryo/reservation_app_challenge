@@ -22,8 +22,8 @@
           </td>
           <td><%= link_to room.name, room_path(room) %></td>
           <td><%= room.description %></td>
-          <td>¥<%= number_with_delimiter(room.price) %></td>
-          <td><%= room.created_at.strftime("%Y/%m/%d") %></td>
+          <td>¥<%= number_with_delimiter(room.price.to_i) %></td>
+          <td><%= l room.created_at.to_date %></td>
         </tr>
       <% end %>
     </tbody>
