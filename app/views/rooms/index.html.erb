@@ -1,18 +1,22 @@
-<h1>施設一覧</h1>
+<h1>予約一覧</h1>
 
-<% if @rooms.any? %>
+<% if @reservations.any? %>
   <table>
     <thead>
       <tr>
-        <th>画像</th>
+        <th>施設画像</th>
         <th>施設名</th>
-        <th>施設詳細</th>
-        <th>料金 (/日)</th>
-        <th>作成日</th>
+        <th>紹介文</th>
+        <th>合計料金</th>
+        <th>チェックイン</th>
+        <th>チェックアウト</th>
+        <th>予約確定日時</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-      <% @rooms.each do |room| %>
+      <% @reservations.each do |reservation| %>
+        <% room = reservation.room %>
         <tr>
           <td>
             <%= image_tag(
@@ -20,16 +24,42 @@
                   alt: room.name, width: 100, height: 100
                 ) %>
           </td>
+
           <td><%= link_to room.name, room_path(room) %></td>
           <td><%= room.description %></td>
-          <td>¥<%= number_with_delimiter(room.price.to_i) %></td>
-          <td><%= l room.created_at.to_date %></td>
+
+          <!-- 合計 = 日数 × 人数 × 料金/日 -->
+          <td>¥<%= number_with_delimiter(reservation.total_price) %></td>
+
+          <!-- yyyy/mm/dd 表示 -->
+          <td><%= reservation.start_date.strftime("%Y/%m/%d") %></td>
+          <td><%= reservation.end_date.strftime("%Y/%m/%d") %></td>
+
+          <!-- yyyy/mm/dd HH:MM 表示 -->
+          <td><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+
+          <!-- 削除（モーダル起動） -->
+          <td>
+            <% img_url = room.image.attached? ? url_for(room.image) : asset_path("default_room.png") %>
+            <%= link_to "削除", "#",
+                  class: "btn btn-danger",
+                  data: {
+                    # ← JS が拾うキー名に合わせて confirm_* に統一
+                    confirm_target: room_reservation_path(room, reservation), # DELETE /rooms/:room_id/reservations/:id
+                    confirm_method: "delete",
+                    confirm_title:  "予約を削除しますか？",
+                    confirm_message:"施設「#{room.name}」の予約を削除します。元に戻せません。",
+                    confirm_image:  img_url,
+                    confirm_name:   room.name,
+                    confirm_price:  "合計: ¥#{number_with_delimiter(reservation.total_price)}",
+                    confirm_extra:  "チェックイン: #{reservation.start_date.strftime("%Y/%m/%d")} ／ チェックアウト: #{reservation.end_date.strftime("%Y/%m/%d")}"
+                  } %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  <p>まだ施設はありません。</p>
+  <p>予約はまだありません。</p>
 <% end %>
 
-<p style="margin-top:12px;"><%= link_to "新しい施設を登録", new_room_path %></p>

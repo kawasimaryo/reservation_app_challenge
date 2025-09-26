@@ -16,7 +16,6 @@
 
     <tbody>
       <% @reservations.each do |r| %>
-        <%# --- 型をそろえて安全に計算 --- %>
         <% nights = (r.end_date.to_date - r.start_date.to_date).to_i %>
         <% people = r.people_count.to_i %>
 
@@ -30,8 +29,9 @@
         <% price =
              case raw_price
              when Numeric then raw_price.to_i
-             when String  then raw_price.gsub(/[^\d]/, "").to_i  # "10,000円" などにも耐性
-             else               (raw_price.to_i rescue 0)
+             when String  then raw_price.gsub(/[^\d]/, "").to_i
+             else
+               (raw_price.to_i rescue 0)
              end %>
 
         <% total = (nights * people * price).to_i %>
@@ -44,18 +44,38 @@
               （削除済みの施設）
             <% end %>
           </td>
+
           <td><%= l r.start_date %></td>
           <td><%= l r.end_date %></td>
           <td><%= nights %> 泊</td>
           <td><%= people %> 人</td>
-          <td>¥<%= number_with_delimiter(total) %></td>  <%# ← ロケール依存回避の手組み表示 %>
+          <td>¥<%= number_with_delimiter(total) %></td>
+
           <td>
-            <%# destroy を routes に追加済みの場合のみ表示 %>
             <% if r.room.present? %>
-              <%= link_to "削除",
-                          room_reservation_path(r.room, r),
-                          method: :delete,
-                          data: { confirm: "この予約を削除します。よろしいですか？" } %>
+              <% img_url = (r.room.respond_to?(:image) && r.room.image&.attached?) ? url_for(r.room.image) : asset_path("default_room.png") %>
+
+              <%= link_to "#",
+                    class: "btn btn-danger",
+                    data: {
+                      confirm_target: room_reservation_path(r.room, r),
+                      confirm_method: "delete",
+                      confirm_title:  "予約を削除しますか？",
+                      confirm_message:"施設「#{r.room.name}」の予約を削除します。元に戻せません。",
+                      confirm_image:  img_url,
+                      confirm_name:   r.room.name,
+                      confirm_price:  "合計: ¥#{number_with_delimiter(total)}",
+                      confirm_extra:  "チェックイン: #{l r.start_date} ／ チェックアウト: #{l r.end_date} ／ 人数: #{people}人"
+                    } do %>
+                削除
+              <% end %>
+
+              <noscript>
+                <%= link_to "削除",
+                            room_reservation_path(r.room, r),
+                            method: :delete,
+                            data: { confirm: "この予約を削除します。よろしいですか？" } %>
+              </noscript>
             <% end %>
           </td>
         </tr>

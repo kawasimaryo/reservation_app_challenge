@@ -1,0 +1,39 @@
+<!-- app/views/shared/_confirm_modal.html.erb -->
+<div id="confirm-modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+  <div class="modal-backdrop" data-modal-close></div>
+
+  <div class="modal-panel">
+    <h3 id="confirm-modal-title">確認</h3>
+
+    <div style="display:flex; gap:12px; align-items:flex-start; margin:8px 0;">
+      <img id="confirm-modal-image" alt="" hidden
+           style="width:72px; height:72px; object-fit:cover; border-radius:8px; border:1px solid #eee;">
+      <div>
+        <p id="confirm-modal-message">本当に削除しますか？ この操作は元に戻せません。</p>
+        <p id="confirm-modal-price" hidden style="margin-top:4px; color:#555;"></p>
+        <!-- 予約の詳細などを出す行（任意表示） -->
+        <p id="confirm-modal-extra" hidden style="margin-top:2px; color:#666; font-size:0.95em;"></p>
+      </div>
+    </div>
+
+    <form id="confirm-modal-form" method="post">
+      <!-- Rails の DELETE などに変換（JS で上書き可） -->
+      <input type="hidden" name="_method" id="confirm-modal-method" value="delete">
+      <!-- CSRF -->
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+      <div class="modal-actions">
+        <button type="button" data-modal-close>キャンセル</button>
+        <button type="submit" id="confirm-modal-submit">削除する</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .modal.hidden { display: none; }
+  .modal { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; z-index: 50; }
+  .modal-backdrop { position:absolute; inset:0; background: rgba(0,0,0,.4); }
+  .modal-panel { position:relative; background:#fff; padding:16px; border-radius:12px; width:min(92vw, 460px); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+  .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
+</style>

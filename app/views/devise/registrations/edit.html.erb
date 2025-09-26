@@ -20,7 +20,6 @@
     <%= f.file_field :avatar,
           accept: "image/*",
           data: { preview_target: "#avatar-preview" } %>
-    <!-- ↑ ここでファイル選択時に #avatar-preview を差し替えます（application.js のプレビュー機能） -->
   </div>
 
   <!-- 名前 -->
@@ -69,10 +68,24 @@
 <h3>アカウントの削除</h3>
 <div>
   不満がありますか？
-  <%= button_to "アカウントを削除する",
-                registration_path(resource_name),
-                method: :delete,
-                data: { confirm: "本当に削除しますか？" } %>
+  <!-- モーダル起動ボタン -->
+  <button
+    type="button"
+    data-confirm-target="<%= registration_path(resource_name) %>"
+    data-confirm-method="delete"
+    data-confirm-title="アカウントを削除しますか？"
+    data-confirm-message="本当に削除してもよろしいですか？ この操作は取り消せません。"
+    data-confirm-image="<%= asset_path('default_avatar.png') %>">
+    アカウントを削除する
+  </button>
+
+  <!-- JS無効時のフォールバック -->
+  <noscript>
+    <%= button_to "アカウントを削除する",
+                  registration_path(resource_name),
+                  method: :delete,
+                  data: { confirm: "本当に削除しますか？" } %>
+  </noscript>
 </div>
 
 <p style="margin-top:12px;">
