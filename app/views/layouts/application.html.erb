@@ -1,16 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
+    <meta charset="utf-8">
     <title>ReservationAppChallenge</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true %>
   </head>
 
   <body>
-    <%= yield %>
+    <header style="display:flex;align-items:center;gap:12px;padding:8px 12px;">
+      <% if user_signed_in? %>
+        <%= image_tag(
+              (current_user.avatar.attached? ? current_user.avatar : "default_avatar.png"),
+              alt: (current_user.name.presence || "ユーザー"),
+              width: 40, height: 40,
+              style: "border-radius:50%;object-fit:cover;"
+            ) %>
+
+        <!-- ドロップダウンのトグル（application.js が制御） -->
+        <button data-dropdown-toggle data-target="#user-menu" style="background:none;border:none;cursor:pointer;">
+          ようこそ、<%= current_user.name.presence || "ユーザー" %> さん ▾
+        </button>
+
+        <!-- 右上に常設しても便利なリンク -->
+        <nav style="margin-left:auto;display:flex;gap:12px;">
+          <%= link_to "予約一覧", reservations_path %>
+          <%= link_to "施設を登録する", new_room_path %>
+          <%= link_to "検索", search_rooms_path %>
+        </nav>
+
+        <!-- ドロップダウンメニュー -->
+        <div id="user-menu" hidden
+             style="position:absolute;top:56px;left:12px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:8px 12px;box-shadow:0 4px 12px rgba(0,0,0,.08);">
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:200px;">
+            <%= link_to "プロフィール編集", profile_edit_user_path(current_user) %>
+            <%= link_to "アカウント編集", edit_user_registration_path %>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { confirm: "ログアウトしますか？" } %>
+          </div>
+        </div>
+      <% else %>
+        <nav style="margin-left:auto;display:flex;gap:12px;">
+          <%= link_to "新規登録", new_user_registration_path %>
+          <%= link_to "ログイン", new_user_session_path %>
+        </nav>
+      <% end %>
+    </header>
+
+    <hr>
+
+    <!-- フラッシュ（application.js が自動フェードアウト） -->
+    <div style="max-width:960px;margin:0 auto;padding:0 12px;">
+      <% flash.each do |type, msg| %>
+        <div class="flash <%= type %>" style="padding:10px 12px;margin:8px 0;border-radius:6px;
+             <%= type.to_s == 'alert' ? 'background:#ffe8e8;border:1px solid #f5b1b1;' : 'background:#e8f5ff;border:1px solid #b1d2f5;' %>">
+          <%= msg %>
+        </div>
+      <% end %>
+    </div>
+
+    <main style="max-width:960px;margin:12px auto;padding:0 12px;">
+      <%= yield %>
+    </main>
+
+    <!-- 共通モーダル -->
+    <%= render "devise/shared/confirm_modal" %>
+
+
   </body>
 </html>

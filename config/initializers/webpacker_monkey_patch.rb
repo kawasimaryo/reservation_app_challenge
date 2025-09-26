@@ -4,7 +4,7 @@
 # webpacker/lib/webpacker/command.rb の load に対応
 
 if defined?(Webpacker::Compiler)
-  require 'webpacker/command'
+  require 'webpacker/commands'
 
   module Webpacker
     class << self

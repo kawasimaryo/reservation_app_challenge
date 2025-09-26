@@ -1,0 +1,93 @@
+<h2>アカウント情報の編集</h2>
+
+<%= form_for(resource,
+             as: resource_name,
+             url: registration_path(resource_name),
+             html: { method: :put, multipart: true }) do |f| %>
+
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <!-- プロフィール画像 -->
+  <div class="field">
+    <%= f.label :avatar, "プロフィール画像" %><br>
+    <%= image_tag(
+          (resource.avatar.attached? ? resource.avatar : "default_avatar.png"),
+          id: "avatar-preview",
+          alt: "現在のアイコン",
+          width: 100, height: 100,
+          style: "border-radius:50%;object-fit:cover;"
+        ) %><br>
+    <%= f.file_field :avatar,
+          accept: "image/*",
+          data: { preview_target: "#avatar-preview" } %>
+  </div>
+
+  <!-- 名前 -->
+  <div class="field">
+    <%= f.label :name, "名前" %><br>
+    <%= f.text_field :name, autocomplete: "name" %>
+  </div>
+
+  <!-- メールアドレス -->
+  <div class="field">
+    <%= f.label :email, "メールアドレス" %><br>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+    <div>確認待ちメール: <%= resource.unconfirmed_email %></div>
+  <% end %>
+
+  <!-- パスワード（未入力なら変更なし） -->
+  <div class="field">
+    <%= f.label :password, "新しいパスワード" %>
+    <i>(変更しない場合は空欄)</i><br>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br><em>最低 <%= @minimum_password_length %> 文字</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation, "新しいパスワード（確認）" %><br>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :current_password, "現在のパスワード（確認用）" %><br>
+    <%= f.password_field :current_password, autocomplete: "current-password" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<hr>
+
+<h3>アカウントの削除</h3>
+<div>
+  不満がありますか？
+  <!-- モーダル起動ボタン -->
+  <button
+    type="button"
+    data-confirm-target="<%= registration_path(resource_name) %>"
+    data-confirm-method="delete"
+    data-confirm-title="アカウントを削除しますか？"
+    data-confirm-message="本当に削除してもよろしいですか？ この操作は取り消せません。"
+    data-confirm-image="<%= asset_path('default_avatar.png') %>">
+    アカウントを削除する
+  </button>
+
+  <!-- JS無効時のフォールバック -->
+  <noscript>
+    <%= button_to "アカウントを削除する",
+                  registration_path(resource_name),
+                  method: :delete,
+                  data: { confirm: "本当に削除しますか？" } %>
+  </noscript>
+</div>
+
+<p style="margin-top:12px;">
+  <%= link_to "戻る", (request.referer || root_path) %>
+</p>

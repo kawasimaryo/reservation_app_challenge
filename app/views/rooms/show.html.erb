@@ -1,0 +1,96 @@
+<p>
+  <%= image_tag(
+        (@room.image.attached? ? @room.image : "default_room.png"),
+        alt: @room.name,
+        width: 300, height: 300
+      ) %>
+</p>
+
+<h1><%= @room.name %></h1>
+
+<p>
+  <strong>施設詳細:</strong>
+  <%= @room.description %>
+</p>
+
+<p>
+  <strong>料金（/日）:</strong>
+  <%= "¥#{number_with_delimiter(@room.price.to_i)}" %>
+</p>
+
+<p>
+  <strong>住所:</strong>
+  <%= @room.address %>
+</p>
+
+<hr>
+
+<h2>この施設を予約する</h2>
+
+<%= form_with url: new_room_reservation_path(@room), method: :get, local: true do |f| %>
+  <%= render "shared/error_messages", model: @reservation %>
+
+  <div class="field">
+    <%= f.label :start_date, "チェックイン日" %><br>
+    <%= f.date_field :start_date,
+          required: true,
+          min: Date.current,
+          value: params[:start_date],
+          data: { behavior: "checkin" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :end_date, "チェックアウト日" %><br>
+    <%= f.date_field :end_date,
+          required: true,
+          value: params[:end_date],
+          data: { behavior: "checkout" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :people_count, "人数" %><br>
+    <%= f.number_field :people_count,
+          min: 1, step: 1, required: true,
+          value: (params[:people_count].presence || 1) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "予約内容の確認へ" %>
+  </div>
+<% end %>
+
+<br>
+
+<% if user_signed_in? && @room.user_id == current_user.id %>
+  <hr>
+  <%= link_to "施設情報を編集する", edit_room_path(@room) %> |
+
+  <% img_url = @room.image.attached? ? url_for(@room.image) : asset_path("default_room.png") %>
+
+  <!-- 削除モーダル起動リンク -->
+  <%= link_to "#",
+        class: "btn btn-danger",
+        data: {
+          confirm_target: room_path(@room),
+          confirm_method: "delete",
+          confirm_title:  "施設を削除しますか？",
+          confirm_message:"施設「#{@room.name}」を削除します。予約もすべて削除されます。",
+          confirm_image:  img_url,
+          confirm_name:   @room.name,
+          confirm_price:  "料金: ¥#{number_with_delimiter(@room.price.to_i)} /日",
+          confirm_extra:  ""
+        } do %>
+    施設を削除する
+  <% end %>
+
+  <!-- JS無効時のフォールバック -->
+  <noscript>
+    <%= link_to "施設を削除する", room_path(@room),
+                method: :delete,
+                data: { confirm: "施設「#{@room.name}」を削除しますか？（予約も削除されます）" } %>
+  </noscript>
+<% end %>
+
+<p style="margin-top: 12px;">
+  <%= link_to "戻る", (request.referer || rooms_path) %>
+</p>

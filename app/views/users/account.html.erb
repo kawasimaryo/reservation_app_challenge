@@ -1,0 +1,10 @@
+<!-- app/views/users/account.html.erb -->
+<h1>アカウント情報</h1>
+
+<p><strong>メールアドレス：</strong><%= @user.email %></p>
+<p><strong>パスワード：</strong> *********</p>
+
+<p style="margin-top:12px;">
+  <%= link_to "アカウント情報を編集", edit_user_registration_path %> |
+  <%= link_to "戻る", (request.referer || root_path) %>
+</p>

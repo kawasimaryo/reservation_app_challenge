@@ -1,0 +1,76 @@
+<h1>予約一覧</h1>
+
+<% if @reservations.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>施設画像</th>
+        <th>施設名</th>
+        <th>紹介文</th>
+        <th>合計料金</th>
+        <th>チェックイン</th>
+        <th>チェックアウト</th>
+        <th>予約確定日時</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reservations.each do |reservation| %>
+        <% room = reservation.room %>
+        <% img_url =
+             if room.image.attached?
+               url_for(room.image)
+             else
+               asset_path("default_room.png")
+             end %>
+        <% price_str = "合計: ¥#{number_with_delimiter(reservation.total_price)}" %>
+        <% guests = (reservation.respond_to?(:people_count) ? reservation.people_count : reservation.try(:num_guests)) %>
+        <% extra_str = "チェックイン: #{l reservation.start_date} ／ チェックアウト: #{l reservation.end_date} ／ 人数: #{guests || '-'}人" %>
+
+        <tr>
+          <td>
+            <%= image_tag(
+                  (room.image.attached? ? room.image : "default_room.png"),
+                  alt: room.name, width: 100, height: 100
+                ) %>
+          </td>
+
+          <td><%= link_to room.name, room_path(room) %></td>
+          <td><%= room.description %></td>
+          <td>¥<%= number_with_delimiter(reservation.total_price) %></td>
+          <td><%= l reservation.start_date, format: :default %></td>
+          <td><%= l reservation.end_date,   format: :default %></td>
+          <td><%= reservation.created_at.strftime("%Y/%m/%d %H:%M") %></td>
+
+          <td>
+            <!-- モーダル削除ボタン（hrefは"#"固定、DELETE先はdata-confirm-targetに渡す） -->
+            <%= link_to "#",
+                  class: "btn btn-danger",
+                  data: {
+                    confirm_target: room_reservation_path(room, reservation), # <- DELETE /rooms/:room_id/reservations/:id
+                    confirm_method: "delete",
+                    confirm_title:  "予約を削除しますか？",
+                    confirm_message: "施設「#{room.name}」の予約を削除します。元に戻せません。",
+                    confirm_image:  img_url,
+                    confirm_name:   room.name,
+                    confirm_price:  price_str,
+                    confirm_extra:  extra_str
+                  } do %>
+              予約を削除
+            <% end %>
+
+            <!-- JS無効時のフォールバック -->
+            <noscript>
+              <%= link_to "予約を削除",
+                          room_reservation_path(room, reservation),
+                          method: :delete,
+                          data: { confirm: "この予約を削除しますか？" } %>
+            </noscript>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>予約はまだありません。</p>
+<% end %>
